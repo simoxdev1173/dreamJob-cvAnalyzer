@@ -1,15 +1,21 @@
 import Image from "next/image";
+import { NavbarH } from "./components/Navbar";
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+    
+    <div className="font-sans grid  min-h-screen p-8 pb-10 gap-16 sm:p-20">
+       <header>
+          <NavbarH />
+        </header>
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+       
         <div>
           <h1 className="text-4xl font-bold text-center sm:text-left">
             Welcome to <span className="text-blue-600">dreamJob</span>
           </h1>
           <p className="mt-4 text-lg text-center sm:text-left">
-            Anlyze your CV and get insights to improve it.
+            Analyze your CV and get insights to improve it.
           </p>
         </div>
     
