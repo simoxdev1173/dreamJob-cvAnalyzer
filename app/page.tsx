@@ -5,7 +5,7 @@ import ButtonMain from "./components/ButtonMain";
 export default function Home() {
   return (
     
-    <div className="font-sans grid  min-h-screen p-8 pb-10 gap-16 sm:p-20">
+    <div className="font-sans grid  min-h-screen pb-10 gap-16">
        <header>
           <NavbarH />
         </header>
@@ -13,7 +13,7 @@ export default function Home() {
        
          <div className="text-center z-10">
           <h1 className="text-4xl font-bold">
-            Welcome to <span className="text-blue-600">dreamJob</span>
+            Welcome to <span className="text-[#80a1d4]">dreamJob</span>
           </h1>
           <p className="mt-4 text-lg">
             Analyze your CV and get insights to improve it.

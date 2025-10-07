@@ -1,24 +1,13 @@
-// components/HeroCarousel.tsx
-"use client";
+// components/PanoramaCarousel.tsx
+"use client"; // This is a client component because it uses hooks and browser APIs
 
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
 export default function HeroCarousel() {
   const ringRef = useRef<HTMLDivElement>(null);
-  // A ref to hold the autoplay timeline so we can pause/resume it
-  const autoplayTimeline = useRef<gsap.core.Timeline | null>(null);
 
-  // Helper function to calculate the parallax effect on the background image
-  const getBgPos = (i: number): string => {
-    const ring = ringRef.current;
-    if (!ring) return '0px 0px';
-    const rotationY = gsap.getProperty(ring, 'rotationY') as number;
-    const wrappedRotation = gsap.utils.wrap(0, 360, rotationY - 180 - i * 36);
-    return `${100 - (wrappedRotation / 360) * 500}px 0px`;
-  };
-
-  // This useEffect hook runs once to set up the scene and the autoplay.
+  // This useEffect hook runs once when the component mounts to set up the initial scene.
   useEffect(() => {
     const ring = ringRef.current;
     if (!ring) return;
@@ -28,9 +17,9 @@ export default function HeroCarousel() {
     // --- Initial Setup ---
     gsap.set(ring, { rotationY: 180, cursor: 'grab' });
     gsap.set(imgs, {
-      rotateY: (i) => -i * 36,
-      transformOrigin: '50% 50% 500px',
-      z: -500,
+      rotateY: (i) => -i * 36, // Distribute images in a circle
+      transformOrigin: '50% 50% 500px', // Set the center of rotation far back
+      z: -500, // Push the images back in 3D space
       backgroundImage: (i) => `url(https://picsum.photos/id/${32 + i}/600/400/)`,
       backgroundPosition: (i) => getBgPos(i),
       backfaceVisibility: 'hidden',
@@ -44,18 +33,6 @@ export default function HeroCarousel() {
       stagger: 0.1,
       ease: 'expo.out',
     });
-
-    // --- Autoplay Timeline ---
-    autoplayTimeline.current = gsap.timeline({ repeat: -1 }) // Loops indefinitely
-      .to(ring, {
-        rotationY: '+=360', // Rotates a full 360 degrees
-        duration: 40,      // Over 40 seconds
-        ease: 'none',
-        onUpdate: () => {
-          // Keep the parallax effect updated during autoplay
-          gsap.set(imgs, { backgroundPosition: (i) => getBgPos(i) });
-        },
-      });
 
     // --- Hover Effects ---
     const handleMouseEnter = (e: Event) => {
@@ -71,9 +48,8 @@ export default function HeroCarousel() {
       img.addEventListener('mouseleave', handleMouseLeave);
     });
 
-    // Cleanup function
+    // Cleanup function to remove event listeners when the component unmounts
     return () => {
-      autoplayTimeline.current?.kill(); // Important: kill the timeline on unmount
       Array.from(imgs).forEach(img => {
         img.removeEventListener('mouseenter', handleMouseEnter);
         img.removeEventListener('mouseleave', handleMouseLeave);
@@ -89,9 +65,6 @@ export default function HeroCarousel() {
     let xPos = 0;
 
     const dragStart = (e: MouseEvent | TouchEvent) => {
-      // Pause autoplay on user interaction
-      autoplayTimeline.current?.pause();
-
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
       xPos = Math.round(clientX);
       gsap.set(ring, { cursor: 'grabbing' });
@@ -117,13 +90,11 @@ export default function HeroCarousel() {
       window.removeEventListener('mousemove', drag);
       window.removeEventListener('touchmove', drag);
       gsap.set(ring, { cursor: 'grab' });
-
-      // Resume autoplay after a brief delay for a smoother transition
-      autoplayTimeline.current?.resume(0.5);
     };
 
     ring.addEventListener('mousedown', dragStart);
     ring.addEventListener('touchstart', dragStart, { passive: true });
+
     window.addEventListener('mouseup', dragEnd);
     window.addEventListener('touchend', dragEnd);
     
@@ -136,6 +107,15 @@ export default function HeroCarousel() {
     };
   }, []);
 
+  // Helper function to calculate the parallax effect on the background image
+  const getBgPos = (i: number): string => {
+    const ring = ringRef.current;
+    if (!ring) return '0px 0px';
+    const rotationY = gsap.getProperty(ring, 'rotationY') as number;
+    const wrappedRotation = gsap.utils.wrap(0, 360, rotationY - 180 - i * 36);
+    return `${100 - (wrappedRotation / 360) * 500}px 0px`;
+  };
+
   return (
     <div className="absolute inset-0 flex items-center justify-center overflow-hidden select-none">
       <div className="relative w-[300px] h-[400px]" style={{ perspective: '2000px' }}>
@@ -144,10 +124,11 @@ export default function HeroCarousel() {
           className="absolute w-full h-full"
           style={{ transformStyle: 'preserve-3d' }}
         >
+          {/* Create 10 image divs for the carousel */}
           {[...Array(10)].map((_, i) => (
             <div
               key={i}
-              className="absolute w-[300px] h-[400px] bg-cover bg-no-repeat rounded-lg"
+              className="absolute w-[300px] h-[400px] bg-cover bg-no-repeat"
             />
           ))}
         </div>

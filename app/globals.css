@@ -10,8 +10,11 @@
 
 @layer base {
   :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #CED4DA;
+  --color-primary: #212529
+  ;
+  --color-secondary: #343A40;
+  --foreground: #ADB5BD;
   }
   
   /* Apply your default font */
@@ -22,9 +25,11 @@
   }
   p{
     font-family: var(--font-ranade);
+    color: var(--color-secondary);
   }
   h1 , h2{
   font-family: var(--font-excon);
+  color: var(--color-primary);
 }
 }
 
