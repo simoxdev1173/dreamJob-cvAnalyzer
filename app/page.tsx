@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { NavbarH } from "./components/Navbar";
-
+import HeroCarousel from "./components/HeroCarousel";
+import ButtonMain from "./components/ButtonMain";
 export default function Home() {
   return (
     
@@ -8,15 +9,27 @@ export default function Home() {
        <header>
           <NavbarH />
         </header>
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+      <main className="flex flex-col gap-[6px] row-start-2 items-center ">
        
-        <div>
-          <h1 className="text-4xl font-bold text-center sm:text-left">
+         <div className="text-center z-10">
+          <h1 className="text-4xl font-bold">
             Welcome to <span className="text-blue-600">dreamJob</span>
           </h1>
-          <p className="mt-4 text-lg text-center sm:text-left">
+          <p className="mt-4 text-lg">
             Analyze your CV and get insights to improve it.
           </p>
+        </div>
+
+       
+     <div className="relative w-full h-[400px] flex justify-center">
+          <HeroCarousel />
+        </div>
+
+        <div className="flex w-full max-w-md flex-col items-center gap-6">
+        <p className="text-center text-balance text-gray-600">
+          Upload your CV and let our AI analyze it for you. Get personalized feedback and tips to enhance your resume .
+        </p>
+        <ButtonMain text="Upload CV" />
         </div>
     
       </main>
