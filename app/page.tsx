@@ -1,8 +1,13 @@
+"use client";
 import Image from "next/image";
 import { NavbarH } from "./components/Navbar";
 import HeroCarousel from "./components/HeroCarousel";
 import ButtonMain from "./components/ButtonMain";
+import AuthModal from "./components/AuthModal";
+import { useState } from "react";
 export default function Home() {
+    const [authOpen ,  setAuthOpen] = useState(false);
+
   return (
     
     <div className="font-sans grid  min-h-screen pb-10 gap-16">
@@ -29,9 +34,10 @@ export default function Home() {
         <p className="text-center text-balance text-gray-600">
           Upload your CV and let our AI analyze it for you. Get personalized feedback and tips to enhance your resume .
         </p>
-        <ButtonMain text="Upload CV" />
+        <ButtonMain text="Upload CV" onClick={() => setAuthOpen(true)}/>
         </div>
-    
+          <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
+
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         <a

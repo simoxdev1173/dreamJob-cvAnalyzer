@@ -1,9 +1,10 @@
 "use client";
+import { useState } from 'react';
 import { Button } from './ui/button';
 
-export default function Btn09({text}: {text?: string}) {
+export default function Btn09({text , onClick}: {text?: string , onClick?: () => void}) {
   return (
-    <Button  className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-gray-800 px-8 py-2.5 tracking-tighter text-white">
+    <Button onClick={onClick} className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-gray-800 px-8 py-2.5 tracking-tighter text-white">
       <span className="absolute h-0 w-0 rounded-full bg-orange-600 transition-all duration-500 ease-out group-hover:h-56 group-hover:w-56"></span>
       <span className="absolute bottom-0 left-0 -ml-2 h-full">
         <svg
