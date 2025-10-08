@@ -119,25 +119,58 @@ export const LogoIcon = () => (
   </a>
 );
 
-// Dummy dashboard content
-const Dashboard = () => (
-   <div className="flex w-full flex-wrap gap-4">
-    <div>
-        <h1 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">Anlayze your Cv</h1>
-    </div>
-  <div className="min-w-[260px] flex-1">
-    <ResumeCard resume={{ id: "1", companyName: "google", jobTitle: "Software Engineer", feedback: { overallScore: 45 }, imagePath: "/cvs/cv1.jpg" }} />
-  </div>
-  <div className="min-w-[260px] flex-1">
-    <ResumeCard resume={{ id: "2", companyName: "facebook", jobTitle: "Product Manager", feedback: { overallScore: 40 }, imagePath: "/cvs/cv2.jpg" }} />
-  </div>
-  <div className="min-w-[260px] flex-1">
-    <ResumeCard resume={{ id: "3", companyName: "twitter", jobTitle: "Data Scientist", feedback: { overallScore: 42 }, imagePath: "/cvs/cv3.jpg" }} />
-  </div>
-  <div className="min-w-[260px] flex-1">
-    <ResumeCard resume={{ id: "4", companyName: "linkedin", jobTitle: "UX Designer", feedback: { overallScore: 48 }, imagePath: "/cvs/cv4.jpg" }} />
-  </div>
-</div>
+const Dashboard = () => {
+  // put your real data here; if [] => you’ll see the empty state
+  const resumes = [
+    { id: "1", companyName: "Google",   jobTitle: "Software Engineer", feedback: { overallScore: 45 }, imagePath: "/cvs/cv1.jpg" },
+    { id: "2", companyName: "Facebook", jobTitle: "Product Manager",   feedback: { overallScore: 40 }, imagePath: "/cvs/cv2.jpg" },
+    { id: "3", companyName: "Twitter",  jobTitle: "Data Scientist",    feedback: { overallScore: 42 }, imagePath: "/cvs/cv3.jpg" },
+    { id: "4", companyName: "LinkedIn", jobTitle: "UX Designer",       feedback: { overallScore: 48 }, imagePath: "/cvs/cv4.jpg" },
+  ];
 
+  function handleAnalyze(id: string) {
+    // wire this to your analyze flow (Puter AI / API route)
+    console.log("Analyze resume:", id);
+  }
 
-);
+  if (!resumes.length) {
+    return (
+      <div className="flex w-full flex-1 items-center justify-center p-6">
+        <div className="rounded-xl border border-dashed border-gray-300 p-8 text-center dark:border-neutral-700">
+          <h2 className="mb-2 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+            You haven’t analyzed any CVs yet
+          </h2>
+          <p className="mb-4 text-sm text-neutral-600 dark:text-neutral-400">
+            Upload a CV to get ATS score, key skills, and improvement tips.
+          </p>
+          <button className="rounded-md border border-gray-200 px-3 py-2 text-sm hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-800">
+            Upload CV
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <section className="flex w-full flex-col gap-4 p-3 md:p-6 bg-white">
+      <header className="flex items-center justify-between">
+        <h1 className="text-xl font-bold text-neutral-800 dark:text-neutral-100">
+          Analyze your CV
+        </h1>
+        {/* Optional: global Upload button */}
+        <button className="rounded-md border border-gray-200 px-3 py-2 text-sm hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-800">
+          Upload CV
+        </button>
+      </header>
+
+      {/* Responsive grid with smaller cards */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+        {resumes.map((r) => (
+          <div key={r.id} className="min-w-[220px]">
+            <ResumeCard resume={r} />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
