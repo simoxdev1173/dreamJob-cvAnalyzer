@@ -7,14 +7,10 @@ import { Input } from "./ui/input";
 import { cn } from "@/lib/utils";
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 
-// your auth helpers (adjust paths if yours differ)
 import { signInEmail, signInGithub, signInGoogle } from "@/lib/auth/sign-in";
 import { signUpEmail as doSignUp } from "@/lib/auth/sign-up";
 
-type Props = {
-  open: boolean;
-  onClose: () => void;
-};
+type Props = { open: boolean; onClose: () => void };
 
 export default function AuthModal({ open, onClose }: Props) {
   const [mode, setMode] = useState<"login" | "signup">("login");
@@ -22,24 +18,41 @@ export default function AuthModal({ open, onClose }: Props) {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [pending, setPending] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
+
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [message, setMessage] = useState<string>("");
 
   if (!open) return null;
 
   async function handleSubmit(e?: React.FormEvent<HTMLFormElement>) {
     e?.preventDefault();
     setPending(true);
-    setErr(null);
+    setStatus("idle");
+    setMessage("");
+
     try {
       if (mode === "signup") {
         const { error } = await doSignUp({ email, password, name });
-        if (error) setErr(error.message ?? "Failed to sign up");
+        if (error) {
+          setStatus("error");
+          setMessage(error.message ?? "Failed to sign up");
+        } else {
+          setStatus("success");
+          setMessage("Account created! Redirecting…");
+        }
       } else {
         const { error } = await signInEmail({ email, password });
-        if (error) setErr(error.message ?? "Failed to sign in");
+        if (error) {
+          setStatus("error");
+          setMessage(error.message ?? "Failed to sign in");
+        } else {
+          setStatus("success");
+          setMessage("Welcome back! Redirecting…");
+        }
       }
-    } catch (error: any) {
-      setErr(error?.message ?? "Something went wrong");
+    } catch (err: any) {
+      setStatus("error");
+      setMessage(err?.message ?? "Something went wrong");
     } finally {
       setPending(false);
     }
@@ -47,11 +60,13 @@ export default function AuthModal({ open, onClose }: Props) {
 
   async function handleGithub() {
     setPending(true);
-    setErr(null);
+    setStatus("idle");
+    setMessage("");
     try {
       await signInGithub();
     } catch (e: any) {
-      setErr(e?.message ?? "GitHub sign-in failed");
+      setStatus("error");
+      setMessage(e?.message ?? "GitHub sign-in failed");
     } finally {
       setPending(false);
     }
@@ -59,11 +74,13 @@ export default function AuthModal({ open, onClose }: Props) {
 
   async function handleGoogle() {
     setPending(true);
-    setErr(null);
+    setStatus("idle");
+    setMessage("");
     try {
       await signInGoogle();
     } catch (e: any) {
-      setErr(e?.message ?? "Google sign-in failed");
+      setStatus("error");
+      setMessage(e?.message ?? "Google sign-in failed");
     } finally {
       setPending(false);
     }
@@ -76,9 +93,7 @@ export default function AuthModal({ open, onClose }: Props) {
           <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
             {mode === "signup" ? "Create your account" : "Welcome back"}
           </h2>
-          <button onClick={onClose} className="text-gray-500">
-            ✕
-          </button>
+          <button onClick={onClose} className="text-gray-500">✕</button>
         </div>
 
         <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
@@ -86,6 +101,22 @@ export default function AuthModal({ open, onClose }: Props) {
             ? "Sign up with email or continue with a provider."
             : "Sign in with your email or continue with a provider."}
         </p>
+
+        {/* Animated status banner (no alerts) */}
+        {status !== "idle" && (
+          <div
+            className={cn(
+              "mt-4 rounded-md border p-2 text-sm animate-in fade-in slide-in-from-top-2",
+              status === "error"
+                ? "border-red-200 bg-red-50 text-red-700"
+                : "border-green-200 bg-green-50 text-green-700"
+            )}
+            role="status"
+            aria-live="polite"
+          >
+            {message}
+          </div>
+        )}
 
         <form className="my-8 space-y-4" onSubmit={handleSubmit}>
           {mode === "signup" && (
@@ -126,12 +157,6 @@ export default function AuthModal({ open, onClose }: Props) {
               required
             />
           </LabelInputContainer>
-
-          {err && (
-            <div className="rounded-md border border-red-200 bg-red-50 p-2 text-sm text-red-700">
-              {err}
-            </div>
-          )}
 
           <button
             className={cn(
