@@ -33,3 +33,31 @@
 }
 }
 
+@layer components {
+  .resume-card {
+    @apply flex w-full flex-col gap-4 rounded-2xl bg-white p-4 shadow-sm transition hover:shadow-md;
+  }
+  .resume-card-header {
+    @apply flex min-h-[90px] items-center justify-between gap-4;
+  }
+  .gradient-border {
+    @apply rounded-2xl p-4;
+    background: linear-gradient(to bottom, var(--color-light-blue-100), var(--color-light-blue-200));
+  }
+}
+
+/* ---- Minimal animation utilities to support `animate-in fade-in` ---- */
+/* Use these if you are NOT using `tailwindcss-animate` plugin */
+@layer utilities {
+  .animate-in {
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+  }
+  .fade-in {
+    animation-name: fade-in-keyframes;
+  }
+}
+
+@keyframes fade-in-keyframes {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); } }

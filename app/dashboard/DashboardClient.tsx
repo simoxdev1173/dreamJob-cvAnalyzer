@@ -11,6 +11,7 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import ResumeCard from "../components/ResumeCard";
 
 type Props = {
   user: {
@@ -120,18 +121,23 @@ export const LogoIcon = () => (
 
 // Dummy dashboard content
 const Dashboard = () => (
-  <div className="flex flex-1">
-    <div className="flex h-full w-full flex-1 flex-col gap-2 rounded-tl-2xl border border-neutral-200 bg-white p-2 md:p-10 dark:border-neutral-700 dark:bg-neutral-900">
-      <div className="flex gap-2">
-        {[...new Array(4)].map((_, idx) => (
-          <div key={"first-array-demo-1" + idx} className="h-20 w-full animate-pulse rounded-lg bg-gray-100 dark:bg-neutral-800" />
-        ))}
-      </div>
-      <div className="flex flex-1 gap-2">
-        {[...new Array(2)].map((_, idx) => (
-          <div key={"second-array-demo-1" + idx} className="h-full w-full animate-pulse rounded-lg bg-gray-100 dark:bg-neutral-800" />
-        ))}
-      </div>
+   <div className="flex w-full flex-wrap gap-4">
+    <div>
+        <h1 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">Anlayze your Cv</h1>
     </div>
+  <div className="min-w-[260px] flex-1">
+    <ResumeCard resume={{ id: "1", companyName: "google", jobTitle: "Software Engineer", feedback: { overallScore: 45 }, imagePath: "/cvs/cv1.jpg" }} />
   </div>
+  <div className="min-w-[260px] flex-1">
+    <ResumeCard resume={{ id: "2", companyName: "facebook", jobTitle: "Product Manager", feedback: { overallScore: 40 }, imagePath: "/cvs/cv2.jpg" }} />
+  </div>
+  <div className="min-w-[260px] flex-1">
+    <ResumeCard resume={{ id: "3", companyName: "twitter", jobTitle: "Data Scientist", feedback: { overallScore: 42 }, imagePath: "/cvs/cv3.jpg" }} />
+  </div>
+  <div className="min-w-[260px] flex-1">
+    <ResumeCard resume={{ id: "4", companyName: "linkedin", jobTitle: "UX Designer", feedback: { overallScore: 48 }, imagePath: "/cvs/cv4.jpg" }} />
+  </div>
+</div>
+
+
 );
