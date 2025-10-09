@@ -8,6 +8,7 @@ import {
   IconBrandTabler,
   IconSettings,
   IconUserBolt,
+  IconFileUpload,
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -31,21 +32,17 @@ export default function DashboardClient({ user }: Props) {
     });
   }
 
+  // Updated links to include the new Profile page
   const links = [
     {
       label: "Dashboard",
-      href: "#",
+      href: "/dashboard", // Use actual paths
       icon: <IconBrandTabler className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />,
     },
     {
       label: "Profile",
-      href: "#",
+      href: "/profile", // Link to the new profile page
       icon: <IconUserBolt className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />,
-    },
-    {
-      label: "Settings",
-      href: "#",
-      icon: <IconSettings className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />,
     },
   ];
 
@@ -54,36 +51,32 @@ export default function DashboardClient({ user }: Props) {
   return (
     <div
       className={cn(
-        "flex h-screen w-full max-w-7xl flex-1 flex-col overflow-hidden rounded-md border border-neutral-200 bg-gray-100 md:flex-row dark:border-neutral-700 dark:bg-neutral-800"
+        "flex h-screen w-full max-w-7xl flex-1 flex-col overflow-hidden rounded-md border border-neutral-200 bg-gray-50 md:flex-row dark:border-neutral-800 dark:bg-neutral-900"
       )}
     >
       <Sidebar open={open} setOpen={setOpen}>
         <SidebarBody className="justify-between gap-10">
-          <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
+          <div className="flex flex-1 flex-col overflow-y-auto">
             {open ? <Logo /> : <LogoIcon />}
-
             <div className="mt-8 flex flex-col gap-2">
               {links.map((link, idx) => (
                 <SidebarLink key={idx} link={link} />
               ))}
-
-              {/* REAL LOGOUT BUTTON */}
               <button
                 type="button"
                 onClick={handleLogout}
-                className="flex w-full items-center gap-2 rounded-md  py-2 text-left hover:bg-red-200 dark:hover:bg-neutral-700"
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-red-500 hover:bg-red-500/10"
               >
-                <IconArrowLeft className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-                <span className="text-sm text-neutral-800 dark:text-neutral-100">Logout</span>
+                <IconArrowLeft className="h-5 w-5 shrink-0" />
+                <span className="font-medium">Logout</span>
               </button>
             </div>
           </div>
-
           <div>
             <SidebarLink
               link={{
                 label: user?.name ?? "User",
-                href: "#",
+                href: "/profile",
                 icon: (
                   <img
                     src={user.image ?? "https://assets.aceternity.com/manu.png"}
@@ -98,29 +91,30 @@ export default function DashboardClient({ user }: Props) {
           </div>
         </SidebarBody>
       </Sidebar>
-
       <Dashboard />
     </div>
   );
 }
 
 export const Logo = () => (
-  <a href="#" className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black">
-    <div className="h-5 w-6 shrink-0 rounded-tl-lg rounded-tr-sm rounded-br-lg rounded-bl-sm bg-black dark:bg-white" />
-    <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="whitespace-pre font-medium text-black dark:text-white">
-      Acet Labs
-    </motion.span>
-  </a>
+    <a href="/" className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black">
+        <img src="/cvdreamjobnoslogan-logo.svg" alt="Cv DreamJob" className="h-8 w-8 shrink-0" />
+        <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="whitespace-pre text-lg font-bold text-black dark:text-white">
+            Cv DreamJob
+        </motion.span>
+    </a>
 );
 
 export const LogoIcon = () => (
-  <a href="#" className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black">
-    <div className="h-5 w-6 shrink-0 rounded-tl-lg rounded-tr-sm rounded-br-lg rounded-bl-sm bg-black dark:bg-white" />
-  </a>
+    <a href="/" className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black">
+        <img src="/cvdreamjobnoslogan-logo.svg" alt="Cv" className="h-8 w-8 shrink-0" />
+    </a>
 );
 
 const Dashboard = () => {
-  // put your real data here; if [] => you’ll see the empty state
+  const router = useRouter();
+  // Set resumes to [] to test the empty state
+  // const resumes: any[] = [];
   const resumes = [
     { id: "1", companyName: "Google",   jobTitle: "Software Engineer", feedback: { overallScore: 45 }, imagePath: "/cvs/cv1.jpg" },
     { id: "2", companyName: "Facebook", jobTitle: "Product Manager",   feedback: { overallScore: 40 }, imagePath: "/cvs/cv2.jpg" },
@@ -128,23 +122,25 @@ const Dashboard = () => {
     { id: "4", companyName: "LinkedIn", jobTitle: "UX Designer",       feedback: { overallScore: 48 }, imagePath: "/cvs/cv4.jpg" },
   ];
 
-  function handleAnalyze(id: string) {
-    // wire this to your analyze flow (Puter AI / API route)
-    console.log("Analyze resume:", id);
-  }
-
+  // Improved "Empty State" component
   if (!resumes.length) {
     return (
-      <div className="flex w-full flex-1 items-center justify-center p-6">
-        <div className="rounded-xl border border-dashed border-gray-300 p-8 text-center dark:border-neutral-700">
-          <h2 className="mb-2 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-            You haven’t analyzed any CVs yet
+      <div className="flex w-full flex-1 items-center justify-center bg-white p-6 dark:bg-neutral-900">
+        <div className="flex max-w-sm flex-col items-center text-center">
+          <div className="mb-4 rounded-full bg-gray-100 p-4 dark:bg-neutral-800">
+            <IconFileUpload className="h-10 w-10 text-gray-500 dark:text-neutral-400" />
+          </div>
+          <h2 className="mb-2 text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+            No CVs Analyzed Yet
           </h2>
-          <p className="mb-4 text-sm text-neutral-600 dark:text-neutral-400">
-            Upload a CV to get ATS score, key skills, and improvement tips.
+          <p className="mb-6 text-sm text-neutral-600 dark:text-neutral-400">
+            Get started by uploading your first CV to receive an ATS score, identify key skills, and get valuable improvement tips.
           </p>
-          <button className="rounded-md border border-gray-200 px-3 py-2 text-sm hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-800">
-            Upload CV
+          <button
+            onClick={() => router.push('/upload-cv')}
+            className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
+          >
+            Upload Your First CV
           </button>
         </div>
       </div>
@@ -152,21 +148,22 @@ const Dashboard = () => {
   }
 
   return (
-    <section className="flex w-full flex-col gap-4 p-3 md:p-6 bg-white">
+    <section className="flex w-full flex-col gap-6 bg-white p-4 md:p-6 dark:bg-neutral-900">
       <header className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-neutral-800 dark:text-neutral-100">
-          Analyze your CV
+        <h1 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
+          Your Analyzed CVs
         </h1>
-        {/* Optional: global Upload button */}
-        <button className="rounded-md border border-gray-200 px-3 py-2 text-sm hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-800">
-          Upload CV
+        <button
+          onClick={() => router.push('/upload-cv')}
+          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+        >
+          Upload New CV
         </button>
       </header>
-
-      {/* Responsive grid with smaller cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+      {/* More compact and responsive grid */}
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {resumes.map((r) => (
-          <div key={r.id} className="min-w-[220px]">
+          <div key={r.id} className="min-w-[200px]">
             <ResumeCard resume={r} />
           </div>
         ))}

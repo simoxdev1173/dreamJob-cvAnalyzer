@@ -14,6 +14,10 @@ const ranade = localFont({
 export const metadata: Metadata = {
   title: "dreamJob Your Cv Anlyzer",
   description: "Analyze your CV and get insights to improve it.",
+  icons: {
+    icon: "/cvdreamjobnoslogan-logo.svg",          
+    shortcut: "/cvdreamjobnoslogan-logo.svg",
+  },
 };
 
 export default function RootLayout({
